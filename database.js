@@ -8,28 +8,33 @@ const host = `mongodb+srv://${username}:${password}@e-commerce-01.a1lyhuw.mongod
 
 const authentication = {
     readPreference: 'primary',
+    //authSource: '$external',
+    //authMechanism: 'MONGODB-X509',
+    //tls: true,
+    //tlsCAFile: tlsCertificateKeyFile
 }
 
-class Database{
+class Database {
 
     constructor() {
     }
 
-    buildURI(){
+    buildURI() {
         const keys = Object.keys(authentication);
         const arr = keys.map(key => `${key}=${authentication[key]}`);
         const params = arr.join("&")
         return `${host}?${params}`;
     }
 
-    async connect(){
+    async connect() {
         let uri = this.buildURI();
         await mongoose.connect(uri);
     }
 
-    disconnect(){
+    disconnect() {
         mongoose.connection.close();
     }
+
 }
 
 module.exports = Database;
