@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema({
     LastLoginTime: { type: Date, required: false, default: null },
     CreateDate: { type: Date, required: false, default: Date.now },
     LastUpdateDate: { type: Date, required: false, default: Date.now },
-    LastUpdatedBy: { type: String, required: false, default: null },
+    LastUpdatedBy: { type: String, required: false, default: null }
 });
 
 module.exports = mongoose.model('User', userSchema, 'Users');

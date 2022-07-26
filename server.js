@@ -15,4 +15,7 @@ authentication(app);
 
 app.listen(3000, () => {
     console.log('server is running on port 3000');
+    new Database().connect().then(() => {
+        console.log('database connected');
+    });
 })
