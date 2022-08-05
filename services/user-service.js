@@ -1,5 +1,6 @@
 const User = require('../schemas/user');
 const { v4: uuidv4 } = require('uuid');
+const e = require("express");
 
 
 class UserService {
@@ -46,6 +47,10 @@ class UserService {
         const filter = { _id: userId };
         const update = { IsAccountActive: true, IsEmailVerified: true };
         await User.updateOne(filter, update);
+    }
+
+    async getUserByEmail(email) {
+        return await User.findOne({ Email: email });
     }
 
 }

@@ -1,9 +1,10 @@
-const hashPassword = require('./encryption');
+const encryption = require('./encryption');
 const randomString = require('./random');
 
 module.exports = {
     encryption: {
-        hashPassword: hashPassword
+        hashPassword: encryption.hashPassword,
+        comparePassword: encryption.comparePassword
     },
     randomString: randomString
 }

@@ -20,6 +20,8 @@ app.listen(3000, () => {
     // console.log("checking env variables");
 
    // console.log(process.env);
+   /*  console.log(`Mail Address: ${process.env.MAIL_ADDRESS}`);
+    console.log(`Mail Password: ${process.env.MAIL_PASSWORD}`);*/
 
     console.log('server is running on port 3000');
     new Database().connect().then(() => {
