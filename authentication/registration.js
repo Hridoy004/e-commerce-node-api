@@ -12,68 +12,60 @@ const registration = async (req, res, next) => {
     if(FirstName && LastName && Email && Password) {
         let hashedPassword = await utils.encryption.hashPassword(Password);
 
-        let userService = new UserService();
+        const userService = new UserService();
         let exists = await userService.isUserAlreadyExists(Email);
-        if(exists) {
+        if(exists)  {
             let response = {
-                Message: `User already exists with the email address ${Email}`,
+                Message: `User already exists with the email address${Email}`,
                 Success: false
             }
-             res.status(400).json(response);
+            res.status(400).json(response);
         } else {
-
-            // we should refactor later
-            // move them into env or constants
-
             const roles = ['user'];
-            let createdUserId = await userService.createNewUser(
+            const createdUserId = await userService.createNewUser(
                 FirstName, LastName, Email, hashedPassword, roles
-            );
-
+            )
             if(createdUserId) {
                 let response = {
-                    Message: `Use created successfully`,
+                    Message: 'use created successful',
                     Success: true
-                };
+                }
 
                 const verificationService = new VerificationService();
                 const token = await verificationService.generateVerificationToken(createdUserId);
 
-                console.log(token);
-
                 try {
                     const mail_sender = new mail.MailSender();
-                    const subject = "Registration successful";
-                    const body = `<p>Hi ${FirstName} ${LastName},</p>
-                                  <br> Welcome aboard! Your registration with our e-commerce application is successful<br>
-                                  <a href="http://localhost:3000/verify?token=${token}">Verify Email</a><br>
+                    const subject = "Registration Successful";
+                    const body = `<p>Hi ${FirstName} ${LastName}</p>
+                                  <br>Welcome abord! Your user creation our e-commerce application is successful<br>
+                                  <a href="http://localhost:3000/verify?token=${token}">Verify Email</a>
                                   <br>Cheers<br>`
                     await mail_sender.sendMail(Email, subject, body);
-                    res.status(201).json(response);
-
-                } catch(e) {
-                    response.Success = false;
-                    response.Message = 'User creation failed because mail server issue';
-                    await userService.deleteUserById(createdUserId)
-                    res.status(400).json(response);
+                    res.status(200).json(response);
+                } catch (e) {
+                    response.Message ='user creation failed  mail server issue';
+                    response.Success = false
+                    await userService.deleteUserById(Email);
+                    res.status(200).json(response);
                 }
+
 
             } else {
                 let response = {
-                    Message: `Use creation failed`,
+                    Message: 'use creation failed',
                     Success: false
-                };
+                }
                 res.status(400).json(response);
             }
         }
-
     } else {
-        let response =  {
-            Message: "Missing required fields",
+        let response = {
+            Message: 'Missing required field',
             Success: false
         }
         res.status(400).json(response);
     }
-};
+}
 
 module.exports = registration;

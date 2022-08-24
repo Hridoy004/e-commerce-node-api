@@ -26,11 +26,23 @@ class TokenService {
        if(!this.secret_key) {
            return null;
        }
-       let token = jwt.sign(
+       return jwt.sign(
            payload,
            this.secret_key,
-           { expiresIn: 7 * 60, audience: '*', algorithm: 'HS256'});
-       return token;
+           { expiresIn: 7 * 60, audience: '*', algorithm: 'HS256'}
+       );
+    }
+
+    verifyToken(token) {
+        try {
+            return jwt.verify(token, this.secret_key, {
+                audience: '*',
+                algorithm: 'HS256'
+            })
+        } catch(e) {
+            console.log("Error occurred!");
+            return null;
+        }
     }
 
 }

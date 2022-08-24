@@ -53,6 +53,24 @@ class UserService {
         return await User.findOne({ Email: email });
     }
 
+    async getUserDetailsById(userId) {
+        let user = await User.findOne({ _id: userId });
+        if(!user)
+            return null;
+        return {
+            Salutation: user.Salutation,
+            FirstName: user.FirstName,
+            LastName: user.LastName,
+            Email: user.Email,
+            UserId: user._id,
+            Roles: user.Roles,
+            loggedIn: true,
+            PhoneNumber: user.PhoneNumber,
+            UserName: user.UserName
+        }
+
+    }
+
 }
 
 module.exports = UserService;

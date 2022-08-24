@@ -32,7 +32,7 @@ const login = async (req, res, next) => {
             let isCorrectPassword = await utils.encryption.comparePassword(Password, hashedPassword);
 
             if(!isActive || !isVerified) {
-                res.status(4000).json({
+                res.status(400).json({
                     Success: false, Message: 'Account not activated/verified yet'
                 })
             } else if(!isCorrectPassword) {
@@ -55,9 +55,7 @@ const login = async (req, res, next) => {
                         Token: token
                     })
                 }
-
             }
-
         }
     }
 };
