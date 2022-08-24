@@ -11,6 +11,12 @@ app.use(bodyParser.json());
 const authentication = require('./authentication');
 const verification = require('./verification');
 const profile = require('./profile');
+const middlewares = require('./middlewares');
+
+// loading middlewares here
+
+middlewares(app);
+
 
 // loading module here
 authentication(app);
