@@ -1,9 +1,9 @@
 const auth = require('./auth');
-const test = require('./test');
+const cors = require('cors');
 
 const initializeMiddlewares = (app) => {
+    app.use(cors());
     app.use(auth);
-    app.use(test);
 }
 
 module.exports = initializeMiddlewares;

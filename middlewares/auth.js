@@ -12,7 +12,9 @@ const unAuthorised = (res) => {
 }
 
 const isTokenExempted = (req) => {
-    return TOKEN_EXEMPTED_URLS.indexOf(req.url) >= 0;
+    let url = req.url.toLowerCase();
+    console.log(url);
+    return TOKEN_EXEMPTED_URLS.indexOf(url) >= 0;
 }
 
 const authenticate = (req) => {
