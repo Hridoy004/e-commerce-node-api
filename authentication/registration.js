@@ -27,7 +27,7 @@ const registration = async (req, res, next) => {
             )
             if(createdUserId) {
                 let response = {
-                    Message: 'use created successful',
+                    Message: 'use created successfully',
                     Success: true
                 }
 
@@ -39,7 +39,7 @@ const registration = async (req, res, next) => {
                     const subject = "Registration Successful";
                     const body = `<p>Hi ${FirstName} ${LastName}</p>
                                   <br>Welcome abord! Your user creation our e-commerce application is successful<br>
-                                  <a href="http://localhost:3000/verify?token=${token}">Verify Email</a>
+                                  <a href="http://localhost:4200/auth/verify?token=${token}">Verify Email</a><br>
                                   <br>Cheers<br>`
                     await mail_sender.sendMail(Email, subject, body);
                     res.status(200).json(response);

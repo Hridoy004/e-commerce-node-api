@@ -1,7 +1,9 @@
 const TokenService = require("../services/token-service");
 
 const TOKEN_EXEMPTED_URLS = [
-    '/authentication/login'
+    '/authentication/login',
+    '/authentication/register',
+    '/verify'
 ]
 
 const unAuthorised = (res) => {
@@ -13,6 +15,10 @@ const unAuthorised = (res) => {
 
 const isTokenExempted = (req) => {
     let url = req.url.toLowerCase();
+    if(url.indexOf("?")) {
+        let tokens = url.split("?");
+        url = tokens[0];
+    }
     console.log(url);
     return TOKEN_EXEMPTED_URLS.indexOf(url) >= 0;
 }

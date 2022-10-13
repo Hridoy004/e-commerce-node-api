@@ -3,7 +3,7 @@ const UserService = require('../../services/user-service');
 
 const verify = async (req, res) => {
 
-    const token = req.query && req.query.token;
+    const token = req.body && req.body.token;
 
     if(!token) {
         res.status(400).json({
