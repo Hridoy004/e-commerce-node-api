@@ -3,7 +3,11 @@ const TokenService = require("../services/token-service");
 const TOKEN_EXEMPTED_URLS = [
     '/authentication/login',
     '/authentication/register',
-    '/verify'
+    '/verify',
+    '/api/v1/categories/',
+    '/api/products/',
+    '/api/products/get/count',
+    '/api/products/get/featured/:count',
 ]
 
 const unAuthorised = (res) => {
