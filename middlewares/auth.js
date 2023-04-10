@@ -8,6 +8,10 @@ const TOKEN_EXEMPTED_URLS = [
     '/api/products/',
     '/api/products/get/count',
     '/api/products/get/featured/:count',
+    '/api/order/',
+    '/api/order/total/sales',
+    '/api/order/get/count',
+    '/api/order/userorders/:userid',
 ]
 
 const unAuthorised = (res) => {
