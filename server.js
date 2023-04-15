@@ -19,7 +19,7 @@ const order = require('./orders');
 // loading middlewares here
 
 middlewares(app);
-
+app.use("/public/uploads", express.static(__dirname + "/public/uploads"));
 
 // loading module here
 authentication(app);

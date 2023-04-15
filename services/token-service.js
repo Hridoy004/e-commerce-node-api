@@ -29,7 +29,7 @@ class TokenService {
        return jwt.sign(
            payload,
            this.secret_key,
-           { expiresIn: 7 * 60, audience: '*', algorithm: 'HS256'}
+           { expiresIn: 60 * 60, audience: '*', algorithm: 'HS256'}
        );
     }
 

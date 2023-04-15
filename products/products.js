@@ -1,7 +1,35 @@
 const mongoose = require('mongoose');
+const multer = require('multer');
 
 const Product = require('../schemas/products');
 const Category = require('../schemas/category');
+
+const FILE_TYPE_MAP = {
+    'image/png': 'png',
+    'image/jpeg': 'jpeg',
+    'image/jpg': 'jpg'
+};
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        const isValid = FILE_TYPE_MAP[file.mimetype];
+        let uploadError = new Error('invalid image type');
+
+        if (isValid) {
+            uploadError = null;
+        }
+        cb(uploadError, 'public/uploads');
+    },
+    filename: function (req, file, cb) {
+        const fileName = file.originalname.split(' ').join('-');
+        const extension = FILE_TYPE_MAP[file.mimetype];
+        cb(null, `${fileName}-${Date.now()}.${extension}`);
+    }
+});
+
+const uploadOptions = multer({ storage: storage });
+
+const uploadOption = uploadOptions.single('image');
 
 const getProduct = async (req, res) => {
     let filter = {};
@@ -30,11 +58,17 @@ const products = async (req, res) => {
     if (!category)
         return res.status(400).send('Invalid Category')
 
+    const file = req.file;
+    if (!file) return res.status(400).send('No image in the request');
+
+    const fileName = file.filename;
+    const basePath = `${req.protocol}://${req.get('host')}/public/upload/`;
+
     let product = new Product({
         name: req.body.name,
         description: req.body.description,
         richDescription: req.body.richDescription,
-        image: req.body.image,
+        image: `${basePath}${fileName}`, // "http://localhost:3000/public/upload/image-2323232"
         brand: req.body.brand,
         price: req.body.price,
         category: req.body.category,
@@ -52,12 +86,26 @@ const products = async (req, res) => {
     res.send(product);
 }
 
-const putProductById = async (req, res) => {
+const updatedProductById = async (req, res) => {
     if (!mongoose.isValidObjectId(req.params.id)) {
-        return res.status(400).send('Invalid Product Id')
+        return res.status(400).send('Invalid Product Id');
     }
     const category = await Category.findById(req.body.category);
-    if (!category) return res.status(400).send('Invalid Category')
+    if (!category) return res.status(400).send('Invalid Category');
+
+    const products = await Product.findById(req.params.id);
+    if (!products) return res.status(400).send('Invalid Product!');
+
+    const file = req.file;
+    let imagepath;
+
+    if (file) {
+        const fileName = file.filename;
+        const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
+        imagepath = `${basePath}${fileName}`;
+    } else {
+        imagepath = product.image;
+    }
 
     const product = await Product.findByIdAndUpdate(
         req.params.id,
@@ -65,7 +113,7 @@ const putProductById = async (req, res) => {
             name: req.body.name,
             description: req.body.description,
             richDescription: req.body.richDescription,
-            image: req.body.image,
+            image: imagepath,
             brand: req.body.brand,
             price: req.body.price,
             category: req.body.category,
@@ -116,13 +164,44 @@ const getProductFeaturedCount = async (req, res) => {
     res.send(products);
 }
 
+const uploadGalleryImage = uploadOptions.array('images', 10);
+
+const updateGalleryImage = async (req, res) => {
+    if (!mongoose.isValidObjectId(req.params.id)) {
+        return res.status(400).send('Invalid Product Id');
+    }
+    const files = req.files;
+    let imagesPaths = [];
+    const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
+
+    if (files) {
+        files.map((file) => {
+            imagesPaths.push(`${basePath}${file.filename}`);
+        });
+    }
+
+    const product = await Product.findByIdAndUpdate(
+        req.params.id,
+        {
+            images: imagesPaths
+        },
+        { new: true }
+    );
+
+    if (!product) return res.status(500).send('the gallery cannot be updated!');
+
+    res.send(product);
+}
 
 module.exports = {
     getProduct: getProduct,
     getProductById: getProductById,
     products: products,
-    putProductById: putProductById,
+    updatedProductById: updatedProductById,
     deleteProductById: deleteProductById,
     getProductCounts: getProductCounts,
-    getProductFeaturedCount: getProductFeaturedCount
+    getProductFeaturedCount: getProductFeaturedCount,
+    uploadOption: uploadOption,
+    uploadGalleryImage: uploadGalleryImage,
+    updateGalleryImage: updateGalleryImage
 };
