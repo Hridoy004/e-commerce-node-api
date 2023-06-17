@@ -29,9 +29,19 @@ const categories = async (req, res) => {
     })
     categoryList = await categoryList.save();
 
-    if (!categoryList)
-        return res.status(404).send('The category cannot be created!');
-    res.status(200).send(categoryList);
+    if (!categoryList) {
+        let response = {
+            Message: 'The category cannot be created!',
+            Success: false
+        }
+        return res.status(404).json(response);
+    }
+
+    let response = {
+        Message: 'category created successfully',
+        Success: true
+    }
+    res.status(200).json(response);
 
 }
 
@@ -47,10 +57,19 @@ const putCategories = async (req, res) => {
             new: true
         }
     )
-
-    if (!categories)
-        return res.status(400).send('The category cannot be created');
-    res.send(categories);
+    if (!categories) {
+        let response = {
+            Message: 'The category cannot be updated!',
+            Success: false
+        }
+        return res.status(404).json(response);
+    } else {
+        let response = {
+            Message: 'Category updated successful!',
+            Success: true
+        }
+        return res.status(200).json(response);
+    }
 }
 
 const remove = async (req, res) => {
