@@ -69,7 +69,7 @@ const deleteUserId = async (req, res) => {
 }
 
 const getUserCount = async (req, res) => {
-    const userCount = await User.countDocuments((count) => count);
+    const userCount = await User.countDocuments({})
 
     if (!userCount) {
         res.status(500).json({ success: false });

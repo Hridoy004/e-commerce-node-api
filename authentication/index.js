@@ -12,6 +12,7 @@ const authentication = (app) => {
     app.post('/authentication/login', asyncHandler(login));
     app.get('/authentication/user', asyncHandler(user.getUser));
     app.delete('/authentication/user/:id', asyncHandler(user.deleteUserId));
+    app.get('/authentication/user/count', asyncHandler(user.getUserCount));
 };
 
 module.exports = authentication;
