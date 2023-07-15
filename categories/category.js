@@ -1,4 +1,5 @@
 const category = require('../schemas/category');
+const Product = require("../schemas/products");
 
 const getCategory = async (req, res) => {
     const categoryList = await category.find();
@@ -93,10 +94,21 @@ const remove = async (req, res) => {
     })
 }
 
+const getCategoryFeaturedCount = async (req, res) => {
+    const count = req.params.count ? req.params.count : 0
+    const categories = await category.find().limit(+count);
+
+    if (!categories) {
+        res.status(500).json({ success: false })
+    }
+    res.send(categories);
+}
+
 module.exports = {
     getCategory: getCategory,
     categories: categories,
     remove: remove,
     getCategoriesId: getCategoriesId,
-    putCategories: putCategories
+    putCategories: putCategories,
+    getCategoryFeaturedCount: getCategoryFeaturedCount
 }
