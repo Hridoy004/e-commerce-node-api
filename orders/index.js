@@ -1,4 +1,5 @@
 const order = require('./orders');
+const checkout = require('./checkout-sessoin')
 const asyncHandler = require('express-async-handler');
 
 const orders = (app) => {
@@ -10,6 +11,7 @@ const orders = (app) => {
     app.post('/api/order', asyncHandler(order.Orders));
     app.put('/api/order/:id', asyncHandler(order.updateOrderById));
     app.delete('/api/order/:id', asyncHandler(order.deleteOrderById));
+    app.post('/create-checkout-session', asyncHandler(checkout));
 };
 
 module.exports = orders;
