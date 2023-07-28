@@ -15,6 +15,7 @@ const middlewares = require('./middlewares');
 const categories = require('./categories');
 const products = require('./products');
 const order = require('./orders');
+const contact = require('./contacts');
 
 // loading middlewares here
 
@@ -28,6 +29,7 @@ profile(app);
 categories(app);
 products(app);
 order(app);
+contact(app);
 
 app.listen(3000, () => {
 

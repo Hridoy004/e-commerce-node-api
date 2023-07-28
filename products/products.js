@@ -69,6 +69,7 @@ const products = async (req, res) => {
         description: req.body.description,
         richDescription: req.body.richDescription,
         image: `${basePath}${fileName}`, // "http://localhost:3000/public/upload/image-2323232"
+        images: `${basePath}${fileName}`,
         brand: req.body.brand,
         price: req.body.price,
         category: req.body.category,

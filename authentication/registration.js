@@ -16,7 +16,7 @@ const registration = async (req, res, next) => {
         let exists = await userService.isUserAlreadyExists(Email);
         if(exists)  {
             let response = {
-                Message: `User already exists with the email address${Email}`,
+                Message: `User already exists with the email address ${Email}`,
                 Success: false
             }
             res.status(400).json(response);
