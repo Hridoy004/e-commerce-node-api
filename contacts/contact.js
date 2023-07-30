@@ -18,13 +18,13 @@ const addContact = async (req, res) => {
     if (contact) {
         let response = {
             Message: "Successful",
-            Status: 200,
+            Success: true,
         };
         res.status(200).send(response);
     } else {
         let response = {
             Message: "Contact can not be created",
-            Status: 404,
+            Success: false,
         };
         res.status(400).json(response);
     }
