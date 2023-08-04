@@ -18,7 +18,9 @@ const TOKEN_EXEMPTED_URLS = [
     '/create-checkout-session',
     '/api/todos',
     '/api/contact',
-    '/api/contact/:id'
+    '/api/contact/:id',
+    '/authentication/forget-password',
+    '/authentication/reset-password'
 ]
 
 const unAuthorised = (res) => {

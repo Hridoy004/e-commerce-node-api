@@ -23,10 +23,10 @@ class MailSender {
         }
 
         const transporter = nodemailer.createTransport({
-            host: 'smtp.zoho.com',
+            host: 'smtp.gmail.com',
             // yPZu6AKULzNs
-            port: 465,
-            secure: true,
+            port: 587,
+            secure: false,
             auth: {
                 user: this.mail_address,
                 pass: this.mail_password

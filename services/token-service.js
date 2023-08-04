@@ -4,6 +4,7 @@ class TokenService {
 
     constructor() {
         this.secret_key = process.env.JWT_SECRET_KEY || null;
+        this.password_secret_key = process.env.JWT_RESET_PASSWORD_KEY || null;
     }
 
     getPayLoadFromUser(user) {
@@ -20,17 +21,35 @@ class TokenService {
         }
     }
 
+    getPayLoadFromUserPassword(user) {
+        return {
+            Email: user.Email,
+        }
+    }
+
     getLoggedInUserToken(user) {
 
-       let payload = this.getPayLoadFromUser(user);
-       if(!this.secret_key) {
-           return null;
-       }
-       return jwt.sign(
-           payload,
-           this.secret_key,
-           { expiresIn: 120 * 60, audience: '*', algorithm: 'HS256'}
-       );
+        let payload = this.getPayLoadFromUser(user);
+        if (!this.secret_key) {
+            return null;
+        }
+        return jwt.sign(
+            payload,
+            this.secret_key,
+            { expiresIn: 120 * 60, audience: '*', algorithm: 'HS256' }
+        );
+    }
+
+    getForgetPasswordToken(user) {
+        let payload = this.getPayLoadFromUserPassword(user);
+        if (!this.password_secret_key) {
+            return null;
+        }
+        return jwt.sign(
+            payload,
+            this.password_secret_key,
+            { expiresIn: 10 * 60, audience: '*', algorithm: 'HS256' }
+        )
     }
 
     verifyToken(token) {
@@ -39,7 +58,19 @@ class TokenService {
                 audience: '*',
                 algorithm: 'HS256'
             })
-        } catch(e) {
+        } catch (e) {
+            console.log("Error occurred!");
+            return null;
+        }
+    }
+
+    resetPasswordVerifyToken(token) {
+        try {
+            return jwt.verify(token, this.password_secret_key, {
+                audience: '*',
+                algorithm: 'HS256'
+            })
+        } catch (e) {
             console.log("Error occurred!");
             return null;
         }
